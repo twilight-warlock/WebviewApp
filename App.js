@@ -12,7 +12,7 @@ import {View} from "react-native"
 
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Form from "./Components/Form"
+import List from "./Components/List"
 
 const storageSchema = {
   primary:0,
@@ -66,6 +66,8 @@ class App extends Component {
       }
     }
     this.updateUrl = this.updateUrl.bind(this)
+    this.updatePrimary = this.updatePrimary.bind(this)
+    this.storeData = this.storeData.bind(this)
   }
 
   componentDidMount(){
@@ -75,6 +77,15 @@ class App extends Component {
 
   updateUrl(url){
     this.setState({currentUrl:url})
+  }
+  updatePrimary = async(index) => {
+    this.getData();
+    let temp = this.state.storage;
+    temp["primary"] = index;
+    // console.log(temp["data"][index].link);
+    this.storeData(temp);
+    this.setState({storage:temp})
+    console.log(this.state);
   }
 
   storeData = async (value) => {
@@ -104,7 +115,7 @@ class App extends Component {
       <>
         <View style={{flex:1}}>
           <WebView source={{ uri: this.state.currentUrl }} />
-          <Form update={this.updateUrl} storage={this.state.storage}></Form>
+          <List update={this.updateUrl} storage={this.state.storage} updatePrimary={this.updatePrimary} storeData={this.storeData}></List>
         </View>
       </>
     )
