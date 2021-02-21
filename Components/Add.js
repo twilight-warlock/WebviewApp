@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {TextInput, View, Text, Button, StyleSheet} from "react-native"
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Add extends Component {
     constructor(props){

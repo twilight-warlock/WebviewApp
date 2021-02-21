@@ -63,11 +63,14 @@ class App extends Component {
             password:"def"
           },
         ]
-      }
+      },
+      delConfirm:false
     }
     this.updateUrl = this.updateUrl.bind(this)
     this.updatePrimary = this.updatePrimary.bind(this)
     this.storeData = this.storeData.bind(this)
+    this.confirmDel = this.confirmDel.bind(this)
+    this.delData = this.delData.bind(this)
   }
 
   componentDidMount(){
@@ -127,12 +130,51 @@ class App extends Component {
     }
   }
 
+  confirmDel(){
+    this.setState({delConfirm:true});
+    console.log(this.state.delConfirm);
+  }
+
+  delData(index){
+    console.log(index);
+    if(this.state.delConfirm){
+        console.log("success");
+        // this.delAndUpdate();
+        this.setState({delConfirm:false})
+    }
+  }
+
+  delAndUpdate = async (index) => {
+    try {
+      let value = await AsyncStorage.getItem('storage')
+      if(value !== null) {
+        let newdata = JSON.parse(value)["data"]
+        newdata.splice(index,1)
+        console.log(newdata);
+        let newValue = JSON.parse(value);
+        newValue["data"] = newdata;
+        this.storeData(newValue)
+        this.setState({storage:newValue})
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
   render() {
     return (
       <>
         <View style={{flex:1}}>
           <WebView source={{ uri: this.state.currentUrl }} />
-          <List update={this.updateUrl} storage={this.state.storage} updatePrimary={this.updatePrimary} getValue={this.getValue}></List>
+          <List 
+            update={this.updateUrl} 
+            storage={this.state.storage} 
+            updatePrimary={this.updatePrimary} 
+            getValue={this.getValue} 
+            confirmDel={this.confirmDel} 
+            delData={this.delData} 
+            
+          />
         </View>
       </>
     )
