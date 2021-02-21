@@ -81,8 +81,9 @@ class App extends Component {
   updatePrimary = async(index) => {
     this.getData();
     let temp = this.state.storage;
+    console.log(index);
     temp["primary"] = index;
-    // console.log(temp["data"][index].link);
+    // console.log(temp);
     this.storeData(temp);
     this.setState({storage:temp})
     console.log(this.state);
@@ -91,7 +92,7 @@ class App extends Component {
   storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('storage', jsonValue)
+      const value = await AsyncStorage.setItem('storage', jsonValue)
     } catch (e) {
       console.log(e);
     }
@@ -109,13 +110,29 @@ class App extends Component {
     }
   }
   
+  getValue = async (obj) => {
+    try {
+      let value = await AsyncStorage.getItem('storage')
+      if(value !== null) {
+        let newdata = JSON.parse(value)["data"]
+        newdata.push(obj)
+        console.log(newdata);
+        let newValue = JSON.parse(value);
+        newValue["data"] = newdata;
+        this.storeData(newValue)
+        this.setState({storage:newValue})
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  }
 
   render() {
     return (
       <>
         <View style={{flex:1}}>
           <WebView source={{ uri: this.state.currentUrl }} />
-          <List update={this.updateUrl} storage={this.state.storage} updatePrimary={this.updatePrimary} storeData={this.storeData}></List>
+          <List update={this.updateUrl} storage={this.state.storage} updatePrimary={this.updatePrimary} getValue={this.getValue}></List>
         </View>
       </>
     )

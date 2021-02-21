@@ -15,6 +15,7 @@ export default class List extends Component {
         this.state = {
             primary: 0
         }
+        this.addData = this.addData.bind(this)
     }
 
     componentDidMount(){
@@ -29,6 +30,11 @@ export default class List extends Component {
         this.props.updatePrimary(index);
         this.setState({primary:index})
         actionSheetRefDel.current?.setModalVisible();
+    }
+
+    addData(data){
+        this.props.getValue(data)
+        actionSheetRefAdd.current?.setModalVisible();
     }
 
     render() {
@@ -101,8 +107,8 @@ export default class List extends Component {
                             ))}
                     </View>
                     <ActionSheet ref={actionSheetRefAdd}>
-                        <ScrollView style={{height:800}}>
-                            <Add storeData={this.props.storeData}></Add>
+                        <ScrollView style={{height:600}}>
+                            <Add addData={this.addData}></Add>
                         </ScrollView>
                     </ActionSheet>
                     <ActionSheet ref={actionSheetRefDel}>

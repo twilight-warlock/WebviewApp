@@ -19,15 +19,12 @@
     "react": "16.13.1",
     "react-native": "0.63.4",
     "react-native-actions-sheet": "^0.4.2",
-    "react-native-bouncy-checkbox": "^1.0.8",
-    "react-native-form-builder": "^1.0.16",
     "react-native-gesture-handler": "^1.10.1",
     "react-native-push-notification": "^7.2.1",
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.17.1",
-    "react-native-webview": "^11.2.3",
-    "tcomb-form-native": "^0.6.20"
+    "react-native-webview": "^11.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
