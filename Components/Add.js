@@ -10,10 +10,10 @@ export default class Add extends Component {
             password:"",
             url:"",
             message:"",
-            color1:"white",
-            color2:"white",
-            color3:"white",
-            color4:"white",
+            color1:"#eee",
+            color2:"#eee",
+            color3:"#eee",
+            color4:"#eee",
         }
     }
 
@@ -53,10 +53,6 @@ export default class Add extends Component {
         }else{
             this.setState({message:"Please fill Name and Url fields"})
         }
-    }
-
-    onFocus(){
-        
     }
 
     render() {

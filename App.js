@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View } from "react-native"
+import { View,Text } from "react-native"
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import List from "./Components/List"
+import Add from "./Components/Add"
 
 class App extends Component {
 	constructor(props) {
@@ -16,6 +17,7 @@ class App extends Component {
 			},
 			delConfirm: false
 		}
+		this.updateUrl = this.updateUrl.bind(this)
 	}
 
 	componentDidMount() {
@@ -109,21 +111,37 @@ class App extends Component {
 			<>
 				<View style={{ flex: 1 }}>
 					{this.state.currentUrl ?
+						<>
 						<WebView source={{ uri: this.state.currentUrl }} />
+						<List
+							update={this.updateUrl}
+							storage={this.state.storage}
+							updatePrimary={this.updatePrimary}
+							getValue={this.getValue}
+							confirmDel={this.confirmDel}
+							delData={this.delData}
+						/>
+						</>
 						:
-						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-							
+						<View style={{flex: 1}}>
+							<Text style={{fontSize:27,
+								marginTop:40,
+								padding:10,
+								fontWeight:"900",
+								textAlign:"center",
+								marginBottom:30,
+								marginHorizontal:40,
+								backgroundColor:"#38ACEC",
+								color:"white",
+								borderRadius:50	
+							}}
+							>
+								Welcome to Alarmy
+							</Text>
+							<Add></Add>
 						</View>
 					}
-					<List
-						update={this.updateUrl}
-						storage={this.state.storage}
-						updatePrimary={this.updatePrimary}
-						getValue={this.getValue}
-						confirmDel={this.confirmDel}
-						delData={this.delData}
-
-					/>
+					
 				</View>
 			</>
 		)
