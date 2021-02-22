@@ -111,37 +111,45 @@ class App extends Component {
 			<>
 				<View style={{ flex: 1 }}>
 					{this.state.currentUrl ?
-						<>
 						<WebView source={{ uri: this.state.currentUrl }} />
-						<List
-							update={this.updateUrl}
-							storage={this.state.storage}
-							updatePrimary={this.updatePrimary}
-							getValue={this.getValue}
-							confirmDel={this.confirmDel}
-							delData={this.delData}
-						/>
-						</>
 						:
-						<View style={{flex: 1}}>
+						<View style={{flex: 1,justifyContent:"center"}}>
 							<Text style={{fontSize:27,
 								marginTop:40,
 								padding:10,
 								fontWeight:"900",
 								textAlign:"center",
-								marginBottom:30,
-								marginHorizontal:40,
-								backgroundColor:"#38ACEC",
-								color:"white",
-								borderRadius:50	
+								borderBottomWidth:3,
+        						borderBottomColor:"#ddd",
+								marginHorizontal:60,
+								color:"#38ACEC"
 							}}
 							>
 								Welcome to Alarmy
 							</Text>
-							<Add></Add>
+							<Text style={{
+								fontSize:16,
+								padding:10,
+								fontWeight:"900",
+								textAlign:"center",
+								marginBottom:30,
+								marginHorizontal:40,
+								color:"#38ACEC",
+								borderRadius:50	
+							}}
+							>
+								Click on the button to get started
+							</Text>
 						</View>
 					}
-					
+					<List
+						update={this.updateUrl}
+						storage={this.state.storage}
+						updatePrimary={this.updatePrimary}
+						getValue={this.getValue}
+						confirmDel={this.confirmDel}
+						delData={this.delData}
+					/>
 				</View>
 			</>
 		)
