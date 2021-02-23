@@ -17,38 +17,28 @@ export default class Add extends Component {
 		}
 	}
 
-	isUrlValid(userInput) {
-		var regexQuery = "/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi";
-		var url = new RegExp(regexQuery, "g");
-		if (url.test(userInput)) {
-			return true;
-		}
-		return false;
-	}
+	isUrlValid = (userInput) => /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi.test(userInput);
 
 	submit() {
 		if (this.state.name && this.state.url && this.state.username && this.state.password) {
-			if ((this.state.username != "" && this.state.password == "") || (this.state.username == "" && this.state.password != "")) {
-				this.setState({ message: "Please fill both username and password" })
-			} else {
+			if (this.state.name.length >= 3) {
+				console.log(this.state.url);
+				if (this.isUrlValid(this.state.url)) {
 
-				if (this.state.name.length >= 3) {
-					// if (this.isUrlValid(JSON.stringify(this.state.url))) {
+					const obj = {
+						"name": this.state.name,
+						"link": this.state.url,
+						"userName": this.state.username,
+						"password": this.state.password
+					}
 
-						const obj = {
-							"name": this.state.name,
-							"link": this.state.url,
-							"userName": this.state.username,
-							"password": this.state.password
-						}
-						this.props.addData(obj)
-					// } else {
-					// 	this.setState({ message: "Incorrect Url" })
-					// }
-
+					this.props.addData(obj)
 				} else {
-					this.setState({ message: "Name field value too small" })
+					this.setState({ message: "Incorrect Url" })
 				}
+
+			} else {
+				this.setState({ message: "Name field value too small" })
 			}
 		} else {
 			this.setState({ message: "Please fill all the fields" })
