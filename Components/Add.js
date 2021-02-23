@@ -70,7 +70,7 @@ export default class Add extends Component {
 					/>
 				</View>
 				<View style={styles.Spacer}>
-					<Text style={styles.Label}>Username (optional)</Text>
+					<Text style={styles.Label}>Username</Text>
 					<TextInput
 						onFocus={() => this.setState({ color3: "#38ACEC" })}
 						onBlur={() => this.setState({ color3: "white" })}
@@ -79,8 +79,8 @@ export default class Add extends Component {
 						onChangeText={(text) => this.setState({ username: text })}
 					/>
 				</View>
-				<View style={styles.Spacer, { marginBottom: 20 }}>
-					<Text style={styles.Label}>Password (optional)</Text>
+				<View style={{...styles.Spacer, marginBottom: 20 }}>
+					<Text style={styles.Label}>Password</Text>
 					<TextInput
 						onFocus={() => this.setState({ color4: "#38ACEC" })}
 						onBlur={() => this.setState({ color4: "white" })}
@@ -90,7 +90,7 @@ export default class Add extends Component {
 						secureTextEntry={true}
 					/>
 				</View>
-				<Button title="Submit" onPress={() => this.submit()} />
+				<Button title="Submit" onPress={this.submit} />
 				<Text style={styles.Error}>{this.state.message}</Text>
 			</View>
 
