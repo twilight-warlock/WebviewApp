@@ -21,6 +21,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
+		this.storeData({})
 		this.getData();
 	}
 
@@ -62,7 +63,7 @@ class App extends Component {
 	getValue = async (obj) => {
 		try {
 			let value = await AsyncStorage.getItem('storage')
-			if (value !== null) {
+			if (JSON.parse(value) !== null && this.state.storage["data"]) {
 				let newdata = JSON.parse(value)["data"]
 				newdata.push(obj)
 				console.log(newdata);
@@ -70,6 +71,13 @@ class App extends Component {
 				newValue["data"] = newdata;
 				this.storeData(newValue)
 				this.setState({ storage: newValue })
+			}else{
+				let newData = this.state.storage;
+				newData["data"] = [obj];
+				newData["primary"] = 0;
+				console.log(newData);
+				this.storeData(newData)
+				this.setState({ storage: newData })
 			}
 		} catch (e) {
 			console.log(e);
@@ -92,7 +100,7 @@ class App extends Component {
 	delAndUpdate = async (index) => {
 		try {
 			let value = await AsyncStorage.getItem('storage')
-			if (value !== null) {
+			if (JSON.parse(value) !== null) {
 				let newdata = JSON.parse(value)["data"]
 				newdata.splice(index, 1)
 				console.log(newdata);

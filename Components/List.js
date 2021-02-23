@@ -42,6 +42,7 @@ export default class List extends Component {
     render() {
         const primary = this.state.primary;
         const data = this.props.storage["data"];
+        console.log(Array.isArray(data));
         return (
             
             <View
@@ -60,7 +61,7 @@ export default class List extends Component {
                 </TouchableOpacity>
 
                 <ActionSheet ref={actionSheetRef}>
-                    {data.length!=0 ?  
+                    {Array.isArray(data) && data.length?  
                     <ScrollView>
                         <View style={styles.ModifyIcons}>
                             <TouchableOpacity 
