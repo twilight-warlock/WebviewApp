@@ -35,7 +35,7 @@ export default class List extends Component {
     }
 
     addData(data){
-        this.props.getValue(data)
+        this.props.getValue(data);
         actionSheetRefAdd.current?.setModalVisible();
     }
 
