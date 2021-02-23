@@ -184,7 +184,10 @@ export default class List extends Component {
                         </ActionSheet>
                     </ScrollView>
                     :
-                    <Text>No data</Text>}
+                    <ScrollView style={{height:600}}>
+                        <Add addData={this.addData}></Add>
+                    </ScrollView>
+                    }
                 </ActionSheet>
             </View>
         )
