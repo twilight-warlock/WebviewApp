@@ -2,7 +2,24 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet } from "react-native"
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import List from "./Components/List"
+import List from "./Components/List";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import PushNotification from "react-native-push-notification";
+global.Token = null;
+
+
+PushNotification.configure({
+	
+	onRegister: function ({token}) {
+		global.Token = token;
+		console.log(global.Token);
+	},
+
+	// (required) Called when a remote is received or opened, or local notification is opened
+	onNotification: function (notification) {
+		notification.finish(PushNotificationIOS.FetchResult.NoData);
+	},
+});
 
 class App extends Component {
 	constructor(props) {
