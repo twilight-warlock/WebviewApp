@@ -33,7 +33,7 @@ export default class Add extends Component {
 			} else {
 
 				if (this.state.name.length >= 3) {
-					if (this.isUrlValid(JSON.stringify(this.state.url))) {
+					// if (this.isUrlValid(JSON.stringify(this.state.url))) {
 
 						const obj = {
 							"name": this.state.name,
@@ -42,9 +42,9 @@ export default class Add extends Component {
 							"password": this.state.password
 						}
 						this.props.addData(obj)
-					} else {
-						this.setState({ message: "Incorrect Url" })
-					}
+					// } else {
+					// 	this.setState({ message: "Incorrect Url" })
+					// }
 
 				} else {
 					this.setState({ message: "Name field value too small" })

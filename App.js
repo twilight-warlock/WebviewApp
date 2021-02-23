@@ -21,7 +21,13 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		this.storeData({})
+		// this.storeData({})
+		// if(this.state.storage && Object.keys(this.state.storage).length!==0 && this.state.storage.constructor == Object){
+		// 	if(Array.isArray(this.state.storage["data"]) && data.length){
+		// 		const link = this.state.storage["data"][0].link;
+		// 		this.setState({currentUrl:link});
+		// 	}
+		// }
 		this.getData();
 	}
 
@@ -77,7 +83,7 @@ class App extends Component {
 				newData["primary"] = 0;
 				console.log(newData);
 				this.storeData(newData)
-				this.setState({ storage: newData })
+				this.setState({ storage: newData,currentUrl:obj.link })
 			}
 		} catch (e) {
 			console.log(e);
