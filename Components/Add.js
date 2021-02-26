@@ -8,7 +8,8 @@ export default class Add extends Component {
 			name: "",
 			username: "",
 			password: "",
-			url: "",
+			url: "http://",
+			port: '80',
 			message: "",
 			color1: "#eee",
 			color2: "#eee",
@@ -22,12 +23,11 @@ export default class Add extends Component {
 	submit() {
 		if (this.state.name && this.state.url && this.state.username && this.state.password) {
 			if (this.state.name.length >= 3) {
-				console.log(this.state.url);
 				if (this.isUrlValid(this.state.url)) {
 
 					const obj = {
 						"name": this.state.name,
-						"link": this.state.url,
+						"link": this.state.url + ':' + this.state.port,
 						"userName": this.state.username,
 						"password": this.state.password
 					}
@@ -67,6 +67,16 @@ export default class Add extends Component {
 						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color2 }}
 						placeholder="Enter Url"
 						onChangeText={(text) => this.setState({ url: text })}
+					/>
+				</View>
+				<View style={styles.Spacer}>
+					<Text style={styles.Label}>Port</Text>
+					<TextInput
+						onFocus={() => this.setState({ color2: "#38ACEC" })}
+						onBlur={() => this.setState({ color2: "white" })}
+						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color2 }}
+						placeholder="Enter Port"
+						onChangeText={(text) => this.setState({ port: text })}
 					/>
 				</View>
 				<View style={styles.Spacer}>
