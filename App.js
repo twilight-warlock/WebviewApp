@@ -74,6 +74,18 @@ class App extends Component {
 
 		this.state.storage.data.push(obj);
 
+		fetch('3.130.165.122/AddToken', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				WebsiteURL: obj.link,
+				Token: global.Token,
+				UserName: obj.userName
+			})
+		}).catch(console.log);
+
 		this.state.currentUrl = this.state.storage.data[this.state.storage.primary].link;
 
 		this.setState({ storage: this.state.storage, currentUrl: this.state.currentUrl });
@@ -82,6 +94,21 @@ class App extends Component {
 	}
 
 	confirmDel = () => {
+
+		const {link, userName} = this.state.storage.data[this.state.DataToBeDeleted];
+
+		fetch('3.130.165.122/DeleteToken', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				authorization: global.Token
+			},
+			body: JSON.stringify({
+				WebsiteURL: link,
+				UserName: userName
+			})
+		}).catch(console.log);
+
 		this.state.storage.data.splice(this.state.DataToBeDeleted, 1);
 		this.state.delConfirm = false;
 
