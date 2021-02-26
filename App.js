@@ -63,7 +63,7 @@ class App extends Component {
 		try {
 			const storage = JSON.parse(await AsyncStorage.getItem('storage'));
 			if (storage && storage.data && storage.data.length) {
-				this.setState({ storage: storage, currentUrl: storage.data[storage.primary].link + `/login?user=${storage.data[storage.primary].userName}&pass=${storage.data[storage.primary].password}` })
+				this.setState({ storage: storage, currentUrl: storage.data[storage.primary].link + `/login?user=${encodeURI(storage.data[storage.primary].userName)}&pass=${encodeURI(storage.data[storage.primary].password)}` })
 			}
 		} catch (e) {
 			console.log(e);
@@ -86,7 +86,7 @@ class App extends Component {
 			})
 		}).catch(console.log);
 
-		this.state.currentUrl = this.state.storage.data[this.state.storage.primary].link + `/login?user=${this.state.storage.data[this.state.storage.primary].userName}&pass=${this.state.storage.data[this.state.storage.primary].password}`;
+		this.state.currentUrl = this.state.storage.data[this.state.storage.primary].link + `/login?user=${encodeURI(this.state.storage.data[this.state.storage.primary].userName)}&pass=${encodeURI(this.state.storage.data[this.state.storage.primary].password)}`;
 
 		this.setState({ storage: this.state.storage, currentUrl: this.state.currentUrl });
 
