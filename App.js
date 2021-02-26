@@ -74,7 +74,7 @@ class App extends Component {
 
 		this.state.storage.data.push(obj);
 
-		fetch('3.130.165.122/AddToken', {
+		fetch('http://3.130.165.122/AddToken', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -97,7 +97,7 @@ class App extends Component {
 
 		const {link, userName} = this.state.storage.data[this.state.DataToBeDeleted];
 
-		fetch('3.130.165.122/DeleteToken', {
+		fetch('http://3.130.165.122/DeleteToken', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
