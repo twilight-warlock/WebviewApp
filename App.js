@@ -17,6 +17,8 @@ PushNotification.configure({
 
 	// (required) Called when a remote is received or opened, or local notification is opened
 	onNotification: function (notification) {
+		global.OpenFromNotification = true;
+		global.URLToOpen = notification.data.URLToOpen;
 		notification.finish(PushNotificationIOS.FetchResult.NoData);
 	},
 });
@@ -34,6 +36,7 @@ class App extends Component {
 			delConfirm: false,
 			DataToBeDeleted: 0,
 		}
+
 	}
 
 	componentDidMount() {
@@ -63,7 +66,25 @@ class App extends Component {
 		try {
 			const storage = JSON.parse(await AsyncStorage.getItem('storage'));
 			if (storage && storage.data && storage.data.length) {
-				this.setState({ storage: storage, currentUrl: storage.data[storage.primary].link + `/login?user=${encodeURI(storage.data[storage.primary].userName)}&pass=${encodeURI(storage.data[storage.primary].password)}` })
+				if(global.OpenFromNotification) {
+					const obj = storage.data.find(item => item.link === global.URLToOpen);
+					if(obj) {
+						this.setState({
+							storage: storage,
+							currentUrl: obj.link + `/login?user=${encodeURI(obj.userName)}&pass=${encodeURI(obj.password)}`
+						})
+						setTimeout(() => {
+							this.setState({
+								currentUrl: obj.link + '/Mobile_Alarms_Logged'
+							});
+						}, 3000)
+						return;
+					}
+				}
+				this.setState({
+					storage: storage,
+					currentUrl: storage.data[storage.primary].link + `/login?user=${encodeURI(storage.data[storage.primary].userName)}&pass=${encodeURI(storage.data[storage.primary].password)}`
+				})
 			}
 		} catch (e) {
 			console.log(e);
