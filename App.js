@@ -11,7 +11,6 @@ global.Token = null;
 PushNotification.configure({
 	onRegister: function ({ token }) {
 		global.Token = token;
-		console.log(global.Token);
 	},
 
 	// (required) Called when a remote is received or opened, or local notification is opened
@@ -47,9 +46,10 @@ class App extends Component {
 
 	updatePrimary = async (index) => {
 		this.state.storage.primary = index;
-		this.state.currentUrl = this.state.storage.data[
+		const currentData = this.state.storage.data[
 			this.state.storage.primary
-		].link;
+		];
+		this.state.currentUrl = currentData.link + `/login?user=${encodeURI(currentData.userName)}&pass=${encodeURI(currentData.password)}`;
 		this.setState({
 			storage: this.state.storage,
 			currentUrl: this.state.currentUrl,
@@ -163,9 +163,12 @@ class App extends Component {
 		if (!this.state.storage.data.length) {
 			this.state.currentUrl = null;
 		} else {
-			this.state.currentUrl = this.state.storage.data[
+			const currentData = this.state.storage.data[
 				this.state.storage.primary
-			].link;
+			];
+
+			this.state.currentUrl = currentData.link + `/login?user=${encodeURI(currentData.userName)}&pass=${encodeURI(currentData.password)}`;
+		
 		}
 
 		this.setState(this.state);
