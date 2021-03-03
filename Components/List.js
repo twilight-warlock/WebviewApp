@@ -11,12 +11,12 @@ const actionSheetRefDel = createRef();
 
 export default class List extends Component {
 
-    onPress = (url) => {
-        this.props.update(url);
+    UpdateWebViewData = (data) => {
+        this.props.update(data);
         actionSheetRef.current?.setModalVisible();
     }
     
-    onPress2 = (index) => {
+    PrimaryOnPress = (index) => {
         this.props.updatePrimary(index);
         this.setState({ primary: index })
         actionSheetRefEdit.current?.setModalVisible();
@@ -30,7 +30,6 @@ export default class List extends Component {
     render() {
         const primary = this.props.storage.primary;
         const data = this.props.storage.data;
-        const dataWithoutPrimary = data.filter((_, index) => index !== primary);
         return (
 
             <View
@@ -68,57 +67,68 @@ export default class List extends Component {
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.Container}>
-                                <TouchableOpacity style={styles.ListItem} onPress={() => this.onPress(data[primary].link)}>
-                                    <Avatar name={data[primary].name} />
-                                    <View style={styles.SiteContainer}>
-                                        <Text style={styles.SiteName}>
-                                            {data[primary].name}
-                                        </Text>
-                                        <Text style={styles.SiteLink}>
-                                            {data[primary].link}
-                                        </Text>
-                                    </View>
-                                    <Text style={styles.Primary}>P</Text>
-                                    <TouchableOpacity
-                                        style={styles.Delete}
-                                        onPress={() => {
-                                            actionSheetRefDel.current?.setModalVisible();
-                                            this.props.delData(primary)
-                                        }}
-                                    >
-                                        <Image
-                                            style={{ height: 24, width: 24 }}
-                                            source={require('../assets/trash.png')}
-                                        />
-                                    </TouchableOpacity>
-                                </TouchableOpacity>
-                                {dataWithoutPrimary.map((item, i) => (
-                                    <View key={i}>
-                                        <TouchableOpacity style={styles.ListItem} onPress={() => this.onPress(item.link)}>
-                                            <Avatar name={item.name} />
-                                            <View style={styles.SiteContainer}>
-                                                <Text style={styles.SiteName}>
-                                                    {item.name}
-                                                </Text>
-                                                <Text style={styles.SiteLink}>
-                                                    {item.link}
-                                                </Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={styles.Delete}
-                                            onPress={() => {
-                                                actionSheetRefDel.current?.setModalVisible();
-                                                this.props.delData(i)
-                                            }}
-                                        >
-                                            <Image
-                                                style={{ height: 24, width: 24 }}
-                                                source={require('../assets/trash.png')}
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
-                                ))}
+                                {
+                                    data.map((item, index) => {
+                                        if(index === primary) {
+                                            return (
+                                                <View key={index}>
+                                                    <TouchableOpacity style={styles.ListItem} onPress={() => this.UpdateWebViewData(data[primary])}>
+                                                        <Avatar name={data[primary].name} />
+                                                        <View style={styles.SiteContainer}>
+                                                            <Text style={styles.SiteName}>
+                                                                {data[primary].name}
+                                                            </Text>
+                                                            <Text style={styles.SiteLink}>
+                                                                {data[primary].link}
+                                                            </Text>
+                                                        </View>
+                                                        <Text style={styles.Primary}>P</Text>
+                                                        <TouchableOpacity
+                                                            style={styles.Delete}
+                                                            onPress={() => {
+                                                                actionSheetRefDel.current?.setModalVisible();
+                                                                this.props.delData(primary)
+                                                            }}
+                                                        >
+                                                            <Image
+                                                                style={{ height: 24, width: 24 }}
+                                                                source={require('../assets/trash.png')}
+                                                            />
+                                                        </TouchableOpacity>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                        } else {
+                                            return (
+                                                <View key={index}>
+                                                    <TouchableOpacity style={styles.ListItem} onPress={() => this.UpdateWebViewData(item)}>
+                                                        <Avatar name={item.name} />
+                                                        <View style={styles.SiteContainer}>
+                                                            <Text style={styles.SiteName}>
+                                                                {item.name}
+                                                            </Text>
+                                                            <Text style={styles.SiteLink}>
+                                                                {item.link}
+                                                            </Text>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        style={styles.Delete}
+                                                        onPress={() => {
+                                                            actionSheetRefDel.current?.setModalVisible();
+                                                            this.props.delData(index)
+                                                        }}
+                                                    >
+                                                        <Image
+                                                            style={{ height: 24, width: 24 }}
+                                                            source={require('../assets/trash.png')}
+                                                        />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                        }
+                                    })
+                                }
                             </View>
                             <ActionSheet ref={actionSheetRefAdd}>
                                 <ScrollView style={{ height: 600 }}>
@@ -128,32 +138,41 @@ export default class List extends Component {
                             <ActionSheet ref={actionSheetRefEdit}>
                                 <ScrollView style={styles.PrimaryContainer}>
                                     <Text style={styles.UpdateText}>Update Primary</Text>
-                                    <TouchableOpacity style={styles.ListItem} onPress={() => this.onPress2(primary)}>
-                                        <Avatar name={data[primary].name} />
-                                        <View style={styles.SiteContainer}>
-                                            <Text style={styles.SiteName}>
-                                                {data[primary].name}
-                                            </Text>
-                                            <Text style={styles.SiteLink}>
-                                                {data[primary].link}
-                                            </Text>
-                                        </View>
-                                        <Text style={styles.CurrentPrimary}>Primary</Text>
-                                    </TouchableOpacity>
-                                    {dataWithoutPrimary.map((item, i) => (
-                                        <TouchableOpacity style={styles.ListItem} key={i} onPress={() => this.onPress2(i)}>
-                                            <Avatar name={item.name} />
-                                            <View style={styles.SiteContainer}>
-                                                <Text style={styles.SiteName}>
-                                                    {item.name}
-                                                </Text>
-                                                <Text style={styles.SiteLink}>
-                                                    {item.link}
-                                                </Text>
-                                            </View>
-                                            <Text style={styles.MakePrimary}>Make Primary</Text>
-                                        </TouchableOpacity>
-                                    ))}
+                                    {
+                                        data.map((item, index) => {
+                                            if(index === primary) {
+                                                return (
+                                                    <TouchableOpacity key={index.toString()} style={styles.ListItem} onPress={() => this.PrimaryOnPress(primary)}>
+                                                        <Avatar name={data[primary].name} />
+                                                        <View style={styles.SiteContainer}>
+                                                            <Text style={styles.SiteName}>
+                                                                {data[primary].name}
+                                                            </Text>
+                                                            <Text style={styles.SiteLink}>
+                                                                {data[primary].link}
+                                                            </Text>
+                                                        </View>
+                                                        <Text style={styles.CurrentPrimary}>Primary</Text>
+                                                    </TouchableOpacity>
+                                                )
+                                            } else {
+                                                return (
+                                                    <TouchableOpacity style={styles.ListItem} key={index.toString()} onPress={() => this.PrimaryOnPress(index)}>
+                                                        <Avatar name={item.name} />
+                                                        <View style={styles.SiteContainer}>
+                                                            <Text style={styles.SiteName}>
+                                                                {item.name}
+                                                            </Text>
+                                                            <Text style={styles.SiteLink}>
+                                                                {item.link}
+                                                            </Text>
+                                                        </View>
+                                                        <Text style={styles.MakePrimary}>Make Primary</Text>
+                                                    </TouchableOpacity>
+                                                )
+                                            }
+                                        })
+                                    }
                                 </ScrollView>
                             </ActionSheet>
                             <ActionSheet ref={actionSheetRefDel}>

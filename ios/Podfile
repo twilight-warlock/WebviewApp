@@ -3,12 +3,12 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'WebViewApp' do
+target 'EvoBM' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
 
-  target 'WebViewAppTests' do
+  target 'EvoBMTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -23,10 +23,10 @@ target 'WebViewApp' do
   end
 end
 
-target 'WebViewApp-tvOS' do
-  # Pods for WebViewApp-tvOS
+target 'EvoBM-tvOS' do
+  # Pods for EvoBM-tvOS
 
-  target 'WebViewApp-tvOSTests' do
+  target 'EvoBM-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

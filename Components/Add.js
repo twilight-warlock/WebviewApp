@@ -20,7 +20,7 @@ export default class Add extends Component {
 
 	isUrlValid = (userInput) => /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi.test(userInput);
 
-	submit() {
+	submit = () => {
 		if (this.state.name && this.state.url && this.state.username && this.state.password) {
 			if (this.state.name.length >= 3) {
 				if (this.isUrlValid(this.state.url)) {
@@ -48,14 +48,14 @@ export default class Add extends Component {
 	render() {
 		return (
 			<View style={styles.FormContainer}>
-				<Text style={styles.Heading}>Add a website</Text>
+				<Text style={styles.Heading}>Add an EVO System</Text>
 				<View style={styles.Spacer}>
 					<Text style={styles.Label}>Name</Text>
 					<TextInput
 						onFocus={() => this.setState({ color1: "#38ACEC" })}
 						onBlur={() => this.setState({ color1: "white" })}
 						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color1 }}
-						placeholder="Enter name of website"
+						placeholder="Enter Name of a Site"
 						onChangeText={(text) => this.setState({ name: text })}
 					/>
 				</View>
