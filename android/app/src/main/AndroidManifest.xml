@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
-      android:name="com.com.evobm.MainApplication"
+      android:name="com.evobm.MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/icon"
       android:roundIcon="@mipmap/icon"
@@ -36,7 +36,7 @@
       </service>
 
       <activity
-        android:name="com.com.evobm.MainActivity"
+        android:name="com.evobm.MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
