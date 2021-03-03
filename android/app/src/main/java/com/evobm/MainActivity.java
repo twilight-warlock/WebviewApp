@@ -1,4 +1,4 @@
-package com.webviewapp;
+package com.evobm;
 
 import com.facebook.react.ReactActivity;
 
