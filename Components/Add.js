@@ -36,8 +36,8 @@ export default class Add extends Component {
 					const obj = {
 						"name": this.state.name,
 						"link": this.state.url + ':' + this.state.port,
-						"userName": toHex(this.state.username),
-						"password": toHex(this.state.password)
+						"userName": this.toHex(this.state.username),
+						"password": this.toHex(this.state.password)
 					}
 
 					this.props.addData(obj)
