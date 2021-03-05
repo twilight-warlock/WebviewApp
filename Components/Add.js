@@ -20,6 +20,14 @@ export default class Add extends Component {
 
 	isUrlValid = (userInput) => /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi.test(userInput);
 
+	toHex = (string) => {
+		let result = "";
+		for (var i = 0; i < string.length; i++) {
+			result += '%' + (string.charCodeAt(i).toString(16));
+		}
+		return result;
+	}
+
 	submit = () => {
 		if (this.state.name && this.state.url && this.state.username && this.state.password) {
 			if (this.state.name.length >= 3) {
@@ -28,8 +36,8 @@ export default class Add extends Component {
 					const obj = {
 						"name": this.state.name,
 						"link": this.state.url + ':' + this.state.port,
-						"userName": this.state.username,
-						"password": this.state.password
+						"userName": toHex(this.state.username),
+						"password": toHex(this.state.password)
 					}
 
 					this.props.addData(obj)

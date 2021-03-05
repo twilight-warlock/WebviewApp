@@ -66,7 +66,7 @@ export default class List extends Component {
                                     />
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.Container}>
+                            <ScrollView style={styles.Container}>
                                 {
                                     data.map((item, index) => {
                                         if(index === primary) {
@@ -129,7 +129,7 @@ export default class List extends Component {
                                         }
                                     })
                                 }
-                            </View>
+                            </ScrollView>
                             <ActionSheet ref={actionSheetRefAdd}>
                                 <ScrollView style={{ height: 600 }}>
                                     <Add addData={this.addData}></Add>
