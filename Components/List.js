@@ -30,6 +30,13 @@ export default class List extends Component {
         this.props.AddWebsite(data);
     }
 
+    onDeletePress = () => {
+        if(this.props.storage.data.length !== 1) {
+            actionSheetRefDel.current?.setModalVisible();
+        }
+        this.props.confirmDel();
+    }
+
     render() {
         const primary = this.props.storage.primary;
         const data = this.props.storage.data;
@@ -180,10 +187,7 @@ export default class List extends Component {
                             </ActionSheet>
                             <ActionSheet ref={actionSheetRefDel}>
                                 <View style={{ height: 80 }}>
-                                    <TouchableOpacity style={styles.DelButton} onPress={() => {
-                                        actionSheetRefDel.current?.setModalVisible();
-                                        this.props.confirmDel();
-                                    }}>
+                                    <TouchableOpacity style={styles.DelButton} onPress={this.onDeletePress}>
                                         <Text style={styles.DelButtonText}>Delete</Text>
                                     </TouchableOpacity>
                                 </View>
