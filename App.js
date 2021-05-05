@@ -21,6 +21,7 @@ username, password
 
 PushNotification.configure({
 	onRegister: function ({ token }) {
+		console.log(token);
 		global.Token = token;
 	},
 
@@ -118,6 +119,11 @@ class App extends Component {
 	AddWebsite = async (obj) => {
 		this.state.storage.data.push(obj);
 
+		console.log({
+			WebsiteURL: obj.link,
+				Token: global.Token,
+				UserName: obj.userName,
+		});
 		fetch("http://3.130.165.122/AddToken", {
 			method: "POST",
 			headers: {

@@ -171,7 +171,7 @@ export default class List extends Component {
                                                             <TouchableOpacity
                                                                 onPress={() => {
                                                                     actionSheetRefDel.current?.setModalVisible();
-                                                                    this.props.delData(primary)
+                                                                    this.props.delData(index)
                                                                 }}
                                                                 style={{marginLeft: 10}}
                                                             >
