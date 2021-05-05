@@ -51,9 +51,12 @@ export default class Add extends Component {
 						password: this.toHex(this.state.password)
 					}
 
-					console.log(obj);
+					let NewData = true;
+					if(this.props.data?.name) {
+						NewData = false;
+					}
 
-					this.props.addData(obj)
+					this.props.addData(obj, NewData)
 				} else {
 					this.setState({ message: "Incorrect Url" })
 				}

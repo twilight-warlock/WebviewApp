@@ -27,8 +27,8 @@ export default class List extends Component {
         actionSheetRefEdit.current?.setModalVisible();
     }
 
-    addData = (data) => {
-        if(typeof this.state.currentEditLinkIndex === 'number') {
+    addData = (data, NewData) => {
+        if(!NewData) {
             this.props.EditWebsite(this.state.currentEditLinkIndex, data);
             actionSheetRefEditLink.current?.setModalVisible();
             this.setState({

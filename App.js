@@ -42,6 +42,7 @@ class App extends Component {
 				primary: 0,
 				data: [],
 			},
+			title: 'Loading...',
 			delConfirm: false,
 			DataToBeDeleted: 0,
 		};
@@ -228,12 +229,30 @@ class App extends Component {
 		this.storeData(this.state.storage);
 	}
 
+	handleTitleMessage = (Event) => {
+		this.setState({title: Event.nativeEvent.data})
+	}
+
 	render() {
-		console.log(this.state.currentUrl);
 		return (
 			<SafeAreaView style={{ flex: 1 }}>
 				{this.state.currentUrl ? (
-					<WebView source={{ uri: 'http://' + this.state.currentUrl }} />
+					<>
+						<View style={{
+							backgroundColor: '#b8b9b4',
+							height: 30,
+							justifyContent: 'center',
+							alignItems: 'center',
+							marginBottom: 10
+						}}>
+							<Text style={{color: 'white'}}>{this.state.title}</Text>
+						</View>
+						<WebView
+							injectedJavaScript="window.window.ReactNativeWebView.postMessage(document.title)"
+      						onMessage={this.handleTitleMessage}
+							source={{ uri: 'http://' + this.state.currentUrl }}
+						/>
+					</>
 				) : (
 						<View style={{ flex: 1, justifyContent: "center" }}>
 							<Image
