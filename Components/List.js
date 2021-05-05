@@ -181,8 +181,8 @@ export default class List extends Component {
                             <ActionSheet ref={actionSheetRefDel}>
                                 <View style={{ height: 80 }}>
                                     <TouchableOpacity style={styles.DelButton} onPress={() => {
-                                        this.props.confirmDel();
                                         actionSheetRefDel.current?.setModalVisible();
+                                        this.props.confirmDel();
                                     }}>
                                         <Text style={styles.DelButtonText}>Delete</Text>
                                     </TouchableOpacity>
