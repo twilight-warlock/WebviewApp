@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, SafeAreaView, ActivityIndicator, Modal } from "react-native";
+import { View, Text, StyleSheet, Image, SafeAreaView } from "react-native";
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import List from "./Components/List";
@@ -23,6 +23,10 @@ PushNotification.configure({
 	onRegister: function ({ token }) {
 		console.log(token);
 		global.Token = token;
+	},
+
+	onRegistrationError: function (err) {
+		console.log(err);
 	},
 
 	// (required) Called when a remote is received or opened, or local notification is opened
@@ -121,8 +125,8 @@ class App extends Component {
 
 		console.log({
 			WebsiteURL: obj.link,
-				Token: global.Token,
-				UserName: obj.userName,
+			Token: global.Token,
+			UserName: obj.userName,
 		});
 		fetch("http://3.130.165.122/AddToken", {
 			method: "POST",
@@ -180,7 +184,7 @@ class App extends Component {
 			];
 
 			this.state.currentUrl = currentData.link + `/login?user=${currentData.userName}&pass=${currentData.password}`;
-		
+
 		}
 
 		this.setState(this.state);
@@ -209,7 +213,7 @@ class App extends Component {
 
 
 		this.state.storage.data[index] = data;
-		
+
 
 		fetch("http://3.130.165.122/AddToken", {
 			method: "POST",
@@ -236,7 +240,7 @@ class App extends Component {
 	}
 
 	handleTitleMessage = (Event) => {
-		this.setState({title: Event.nativeEvent.data})
+		this.setState({ title: Event.nativeEvent.data })
 	}
 
 	render() {
@@ -251,31 +255,31 @@ class App extends Component {
 							alignItems: 'center',
 							marginBottom: 10
 						}}>
-							<Text style={{color: 'white'}}>{this.state.title}</Text>
+							<Text style={{ color: 'white' }}>{this.state.title}</Text>
 						</View>
 						<WebView
 							injectedJavaScript="window.window.ReactNativeWebView.postMessage(document.title)"
-      						onMessage={this.handleTitleMessage}
+							onMessage={this.handleTitleMessage}
 							source={{ uri: 'http://' + this.state.currentUrl }}
 						/>
 					</>
 				) : (
-						<View style={{ flex: 1, justifyContent: "center" }}>
-							<Image
-								source={require("./assets/logo1.png")}
-								style={{
-									width: 300,
-									height: 300,
-									alignSelf: "center",
-									paddingBottom: 20,
-								}}
-							/>
-							<Text style={styles.Welcome}>Welcome to EvoBM</Text>
-							<Text style={styles.GetStarted}>
-								Click on the button to get started
+					<View style={{ flex: 1, justifyContent: "center" }}>
+						<Image
+							source={require("./assets/logo1.png")}
+							style={{
+								width: 300,
+								height: 300,
+								alignSelf: "center",
+								paddingBottom: 20,
+							}}
+						/>
+						<Text style={styles.Welcome}>Welcome to EvoBM</Text>
+						<Text style={styles.GetStarted}>
+							Click on the button to get started
             				</Text>
-						</View>
-					)}
+					</View>
+				)}
 				<List
 					update={this.updateUrl}
 					storage={this.state.storage}
