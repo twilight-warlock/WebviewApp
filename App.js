@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, SafeAreaView, ActivityIndicator, Modal } from "react-native";
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import List from "./Components/List";
@@ -52,7 +52,9 @@ class App extends Component {
 	}
 
 	updateUrl = (data) => {
-		this.setState({ currentUrl: data.link + `/login?user=${encodeURI(data.userName)}&pass=${encodeURI(data.password)}` });
+		this.setState({
+			currentUrl: data.link + `/login?user=${data.userName}&pass=${data.password}`
+		});
 	};
 
 	updatePrimary = async (index) => {
@@ -60,7 +62,7 @@ class App extends Component {
 		const currentData = this.state.storage.data[
 			this.state.storage.primary
 		];
-		this.state.currentUrl = currentData.link + `/login?user=${encodeURI(currentData.userName)}&pass=${encodeURI(currentData.password)}`;
+		this.state.currentUrl = currentData.link + `/login?user=${currentData.userName}&pass=${currentData.password}`;
 		this.setState({
 			storage: this.state.storage,
 			currentUrl: this.state.currentUrl,
@@ -90,9 +92,7 @@ class App extends Component {
 							storage: storage,
 							currentUrl:
 								obj.link +
-								`/login?user=${encodeURI(obj.userName)}&pass=${encodeURI(
-									obj.password
-								)}`,
+								`/login?user=${obj.userName}&pass=${obj.password}`,
 						});
 						setTimeout(() => {
 							this.setState({
@@ -106,9 +106,7 @@ class App extends Component {
 					storage: storage,
 					currentUrl:
 						storage.data[storage.primary].link +
-						`/login?user=${encodeURI(
-							storage.data[storage.primary].userName
-						)}&pass=${encodeURI(storage.data[storage.primary].password)}`,
+						`/login?user=${storage.data[storage.primary].userName}&pass=${storage.data[storage.primary].password}`,
 				});
 			}
 		} catch (e) {
@@ -133,11 +131,7 @@ class App extends Component {
 
 		this.state.currentUrl =
 			this.state.storage.data[this.state.storage.primary].link +
-			`/login?user=${encodeURI(
-				this.state.storage.data[this.state.storage.primary].userName
-			)}&pass=${encodeURI(
-				this.state.storage.data[this.state.storage.primary].password
-			)}`;
+			`/login?user=${this.state.storage.data[this.state.storage.primary].userName}&pass=${this.state.storage.data[this.state.storage.primary].password}`;
 
 		this.setState({
 			storage: this.state.storage,
@@ -178,7 +172,7 @@ class App extends Component {
 				this.state.storage.primary
 			];
 
-			this.state.currentUrl = currentData.link + `/login?user=${encodeURI(currentData.userName)}&pass=${encodeURI(currentData.password)}`;
+			this.state.currentUrl = currentData.link + `/login?user=${currentData.userName}&pass=${currentData.password}`;
 		
 		}
 
@@ -191,8 +185,9 @@ class App extends Component {
 	};
 
 	render() {
+		console.log(this.state.currentUrl);
 		return (
-			<View style={{ flex: 1 }}>
+			<SafeAreaView style={{ flex: 1 }}>
 				{this.state.currentUrl ? (
 					<WebView source={{ uri: 'http://' + this.state.currentUrl }} />
 				) : (
@@ -220,7 +215,7 @@ class App extends Component {
 					confirmDel={this.confirmDel}
 					delData={this.delData}
 				/>
-			</View>
+			</SafeAreaView>
 		);
 	}
 }
