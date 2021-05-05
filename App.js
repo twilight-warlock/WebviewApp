@@ -184,6 +184,50 @@ class App extends Component {
 		this.setState({ delConfirm: false, DataToBeDeleted: index });
 	};
 
+	EditWebsite = (index, data) => {
+
+		const { link, userName } = this.state.storage.data[index];
+
+		fetch("http://3.130.165.122/DeleteToken", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				authorization: global.Token,
+			},
+			body: JSON.stringify({
+				WebsiteURL: link,
+				UserName: userName,
+			}),
+		}).catch(console.log);
+
+
+		this.state.storage.data[index] = data;
+		
+
+		fetch("http://3.130.165.122/AddToken", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				WebsiteURL: data.link,
+				Token: global.Token,
+				UserName: data.userName,
+			}),
+		}).catch(console.log);
+
+		this.state.currentUrl =
+			this.state.storage.data[this.state.storage.primary].link +
+			`/login?user=${this.state.storage.data[this.state.storage.primary].userName}&pass=${this.state.storage.data[this.state.storage.primary].password}`;
+
+		this.setState({
+			storage: this.state.storage,
+			currentUrl: this.state.currentUrl,
+		});
+
+		this.storeData(this.state.storage);
+	}
+
 	render() {
 		console.log(this.state.currentUrl);
 		return (
@@ -214,6 +258,7 @@ class App extends Component {
 					AddWebsite={this.AddWebsite}
 					confirmDel={this.confirmDel}
 					delData={this.delData}
+					EditWebsite={this.EditWebsite}
 				/>
 			</SafeAreaView>
 		);

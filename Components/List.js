@@ -8,8 +8,13 @@ const actionSheetRef = createRef();
 const actionSheetRefAdd = createRef();
 const actionSheetRefEdit = createRef();
 const actionSheetRefDel = createRef();
+const actionSheetRefEditLink = createRef();
 
 export default class List extends Component {
+
+    state = {
+        currentEditLinkIndex: null,
+    }
 
     UpdateWebViewData = (data) => {
         this.props.update(data);
@@ -23,11 +28,18 @@ export default class List extends Component {
     }
 
     addData = (data) => {
-        console.log(this.props.storage.data);
-        if(this.props.storage.data.length) {
-            actionSheetRefAdd.current?.setModalVisible();
+        if(typeof this.state.currentEditLinkIndex === 'number') {
+            this.props.EditWebsite(this.state.currentEditLinkIndex, data);
+            actionSheetRefEditLink.current?.setModalVisible();
+            this.setState({
+                currentEditLinkIndex: null
+            });
+        } else {
+            if(this.props.storage.data.length) {
+                actionSheetRefAdd.current?.setModalVisible();
+            }
+            this.props.AddWebsite(data);
         }
-        this.props.AddWebsite(data);
     }
 
     onDeletePress = () => {
@@ -35,6 +47,13 @@ export default class List extends Component {
             actionSheetRefDel.current?.setModalVisible();
         }
         this.props.confirmDel();
+    }
+
+    EditWebsite = (index) => {
+        this.setState({
+            currentEditLinkIndex: index
+        });
+        actionSheetRefEditLink.current?.setModalVisible();
     }
 
     render() {
@@ -71,7 +90,7 @@ export default class List extends Component {
                                     actionSheetRefEdit.current?.setModalVisible();
                                 }}>
                                     <Image
-                                        style={{ width: 50, height: 50 }}
+                                        style={{ width: 25, height: 25, margin: 10  }}
                                         source={require('../assets/edit.png')}
                                     />
                                 </TouchableOpacity>
@@ -83,28 +102,43 @@ export default class List extends Component {
                                             return (
                                                 <View key={index}>
                                                     <TouchableOpacity style={styles.ListItem} onPress={() => this.UpdateWebViewData(data[primary])}>
-                                                        <Avatar name={data[primary].name} />
-                                                        <View style={styles.SiteContainer}>
-                                                            <Text style={styles.SiteName}>
-                                                                {data[primary].name}
-                                                            </Text>
-                                                            <Text style={styles.SiteLink}>
-                                                                {data[primary].link}
-                                                            </Text>
+                                                        <View style={{flexDirection: 'row'}}>
+                                                            <Avatar name={data[primary].name} />
+                                                            <View style={styles.SiteContainer}>
+                                                                <Text style={styles.SiteName}>
+                                                                    {data[primary].name}
+                                                                </Text>
+                                                                <Text style={styles.SiteLink}>
+                                                                    {data[primary].link}
+                                                                </Text>
+                                                            </View>
                                                         </View>
-                                                        <Text style={styles.Primary}>P</Text>
-                                                        <TouchableOpacity
-                                                            style={styles.Delete}
-                                                            onPress={() => {
-                                                                actionSheetRefDel.current?.setModalVisible();
-                                                                this.props.delData(primary)
-                                                            }}
-                                                        >
-                                                            <Image
-                                                                style={{ height: 24, width: 24 }}
-                                                                source={require('../assets/trash.png')}
-                                                            />
-                                                        </TouchableOpacity>
+                                                        <View style={{flexDirection: 'row'}}>
+                                                            <Text style={styles.Primary}>P</Text>
+                                                            <TouchableOpacity style={{marginLeft: 15}} onPress={() => {
+                                                                this.EditWebsite(index);
+                                                            }}>
+                                                                <Image
+                                                                    style={{ height: 22, width: 22, marginTop: 2 }}
+                                                                    source={require('../assets/edit.png')}
+                                                                />
+                                                            </TouchableOpacity>
+
+
+                                                            <TouchableOpacity
+                                                                onPress={() => {
+                                                                    actionSheetRefDel.current?.setModalVisible();
+                                                                    this.props.delData(primary)
+                                                                }}
+                                                                style={{marginLeft: 10}}
+                                                            >
+                                                                <Image
+                                                                    style={{ height: 24, width: 24 }}
+                                                                    source={require('../assets/trash.png')}
+                                                                />
+                                                            </TouchableOpacity>
+                                                            
+                                                        </View>
                                                     </TouchableOpacity>
                                                 </View>
                                             )
@@ -112,27 +146,42 @@ export default class List extends Component {
                                             return (
                                                 <View key={index}>
                                                     <TouchableOpacity style={styles.ListItem} onPress={() => this.UpdateWebViewData(item)}>
-                                                        <Avatar name={item.name} />
-                                                        <View style={styles.SiteContainer}>
-                                                            <Text style={styles.SiteName}>
-                                                                {item.name}
-                                                            </Text>
-                                                            <Text style={styles.SiteLink}>
-                                                                {item.link}
-                                                            </Text>
+                                                        <View style={{flexDirection: 'row'}}>
+                                                            <Avatar name={item.name} />
+                                                            <View style={styles.SiteContainer}>
+                                                                <Text style={styles.SiteName}>
+                                                                    {item.name}
+                                                                </Text>
+                                                                <Text style={styles.SiteLink}>
+                                                                    {item.link}
+                                                                </Text>
+                                                            </View>
                                                         </View>
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity
-                                                        style={styles.Delete}
-                                                        onPress={() => {
-                                                            actionSheetRefDel.current?.setModalVisible();
-                                                            this.props.delData(index)
-                                                        }}
-                                                    >
-                                                        <Image
-                                                            style={{ height: 24, width: 24 }}
-                                                            source={require('../assets/trash.png')}
-                                                        />
+                                                        <View style={{flexDirection: 'row'}}>
+                                                            <TouchableOpacity style={{marginLeft: 15}} onPress={() => {
+                                                                this.EditWebsite(index);
+                                                            }}>
+                                                                <Image
+                                                                    style={{ height: 22, width: 22, marginTop: 2 }}
+                                                                    source={require('../assets/edit.png')}
+                                                                />
+                                                            </TouchableOpacity>
+
+
+                                                            <TouchableOpacity
+                                                                onPress={() => {
+                                                                    actionSheetRefDel.current?.setModalVisible();
+                                                                    this.props.delData(primary)
+                                                                }}
+                                                                style={{marginLeft: 10}}
+                                                            >
+                                                                <Image
+                                                                    style={{ height: 24, width: 24 }}
+                                                                    source={require('../assets/trash.png')}
+                                                                />
+                                                            </TouchableOpacity>
+                                                            
+                                                        </View>
                                                     </TouchableOpacity>
                                                 </View>
                                             )
@@ -145,6 +194,12 @@ export default class List extends Component {
                                     <Add addData={this.addData}></Add>
                                 </ScrollView>
                             </ActionSheet>
+                            <ActionSheet ref={actionSheetRefEditLink}>
+                                <ScrollView style={{ height: 600 }}>
+                                    <Add data={data[this.state.currentEditLinkIndex]} addData={this.addData}></Add>
+                                </ScrollView>
+                            </ActionSheet>
+                            
                             <ActionSheet ref={actionSheetRefEdit}>
                                 <ScrollView style={styles.PrimaryContainer}>
                                     <Text style={styles.UpdateText}>Update Primary</Text>
@@ -254,7 +309,8 @@ const styles = StyleSheet.create({
     ListItem: {
         display: "flex",
         flexDirection: 'row',
-        alignItems: "center",
+        alignItems: 'center',
+        justifyContent: "space-between",
         marginBottom: 10
     },
     MiniImage: {
@@ -274,12 +330,18 @@ const styles = StyleSheet.create({
         padding: 0
     },
     Primary: {
-        fontSize: 22,
-        textAlign: "right",
+        fontSize: 25,
         fontWeight: "900",
-        paddingRight: 55,
-        flex: 1,
         color: "#0080aa"
+    },
+    EditLink: {
+        paddingRight: 0,
+        position: "absolute",
+        width: 30,
+        margin: "auto",
+        height: 30,
+        right: 30,
+        bottom: 10
     },
     Delete: {
         paddingRight: 0,
