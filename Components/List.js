@@ -23,8 +23,11 @@ export default class List extends Component {
     }
 
     addData = (data) => {
+        console.log(this.props.storage.data);
+        if(this.props.storage.data.length) {
+            actionSheetRefAdd.current?.setModalVisible();
+        }
         this.props.AddWebsite(data);
-        actionSheetRefAdd.current?.setModalVisible();
     }
 
     render() {

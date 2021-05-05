@@ -15,6 +15,7 @@ export default class Add extends Component {
 			color2: "#eee",
 			color3: "#eee",
 			color4: "#eee",
+			color5: "#eee",
 		}
 	}
 
@@ -32,12 +33,13 @@ export default class Add extends Component {
 		if (this.state.name && this.state.url && this.state.username && this.state.password) {
 			if (this.state.name.length >= 3) {
 				if (this.isUrlValid(this.state.url)) {
-
+					
+					this.state.url = this.state.url.replace(new RegExp("^(http[s]?://www\\.|http[s]?://|www\\.)"), "");
 					const obj = {
-						"name": this.state.name,
-						"link": this.state.url + ':' + this.state.port,
-						"userName": this.toHex(this.state.username),
-						"password": this.toHex(this.state.password)
+						name: this.state.name,
+						link: this.state.url + ':' + this.state.port,
+						userName: this.toHex(this.state.username),
+						password: this.toHex(this.state.password)
 					}
 
 					this.props.addData(obj)
@@ -80,9 +82,9 @@ export default class Add extends Component {
 				<View style={styles.Spacer}>
 					<Text style={styles.Label}>Port</Text>
 					<TextInput
-						onFocus={() => this.setState({ color2: "#38ACEC" })}
-						onBlur={() => this.setState({ color2: "white" })}
-						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color2 }}
+						onFocus={() => this.setState({ color3: "#38ACEC" })}
+						onBlur={() => this.setState({ color3: "white" })}
+						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color3 }}
 						placeholder="Enter Port"
 						onChangeText={(text) => this.setState({ port: text })}
 					/>
@@ -90,9 +92,9 @@ export default class Add extends Component {
 				<View style={styles.Spacer}>
 					<Text style={styles.Label}>Username</Text>
 					<TextInput
-						onFocus={() => this.setState({ color3: "#38ACEC" })}
-						onBlur={() => this.setState({ color3: "white" })}
-						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color3 }}
+						onFocus={() => this.setState({ color4: "#38ACEC" })}
+						onBlur={() => this.setState({ color4: "white" })}
+						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color4 }}
 						placeholder="Enter Username"
 						onChangeText={(text) => this.setState({ username: text })}
 					/>
@@ -100,9 +102,9 @@ export default class Add extends Component {
 				<View style={{...styles.Spacer, marginBottom: 20 }}>
 					<Text style={styles.Label}>Password</Text>
 					<TextInput
-						onFocus={() => this.setState({ color4: "#38ACEC" })}
-						onBlur={() => this.setState({ color4: "white" })}
-						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color4 }}
+						onFocus={() => this.setState({ color5: "#38ACEC" })}
+						onBlur={() => this.setState({ color5: "white" })}
+						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color5 }}
 						placeholder="Enter Password"
 						onChangeText={(text) => this.setState({ password: text })}
 						secureTextEntry={true}

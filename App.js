@@ -8,6 +8,17 @@ import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import PushNotification from "react-native-push-notification";
 global.Token = null;
 
+/**
+ * 
+ * 
+ * http://cstechno.dyndns.org
+port 8080
+username, password
+123, 123
+1234, !@#$
+12345, 12345
+ */
+
 PushNotification.configure({
 	onRegister: function ({ token }) {
 		global.Token = token;
@@ -183,7 +194,7 @@ class App extends Component {
 		return (
 			<View style={{ flex: 1 }}>
 				{this.state.currentUrl ? (
-					<WebView source={{ uri: this.state.currentUrl }} />
+					<WebView source={{ uri: 'http://' + this.state.currentUrl }} />
 				) : (
 						<View style={{ flex: 1, justifyContent: "center" }}>
 							<Image
