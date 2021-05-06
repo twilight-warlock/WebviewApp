@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, SafeAreaView } from "react-native";
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import List from "./Components/List";
@@ -8,9 +8,25 @@ import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import PushNotification from "react-native-push-notification";
 global.Token = null;
 
+/**
+ * 
+ * 
+ * http://cstechno.dyndns.org
+port 8080
+username, password
+123, 123
+1234, !@#$
+12345, 12345
+ */
+
 PushNotification.configure({
 	onRegister: function ({ token }) {
+		console.log(token);
 		global.Token = token;
+	},
+
+	onRegistrationError: function (err) {
+		console.log(err);
 	},
 
 	// (required) Called when a remote is received or opened, or local notification is opened
@@ -31,6 +47,7 @@ class App extends Component {
 				primary: 0,
 				data: [],
 			},
+			title: 'Loading...',
 			delConfirm: false,
 			DataToBeDeleted: 0,
 		};
@@ -41,7 +58,9 @@ class App extends Component {
 	}
 
 	updateUrl = (data) => {
-		this.setState({ currentUrl: data.link + `/login?user=${encodeURI(data.userName)}&pass=${encodeURI(data.password)}` });
+		this.setState({
+			currentUrl: data.link + `/login?user=${data.userName}&pass=${data.password}`
+		});
 	};
 
 	updatePrimary = async (index) => {
@@ -49,7 +68,7 @@ class App extends Component {
 		const currentData = this.state.storage.data[
 			this.state.storage.primary
 		];
-		this.state.currentUrl = currentData.link + `/login?user=${encodeURI(currentData.userName)}&pass=${encodeURI(currentData.password)}`;
+		this.state.currentUrl = currentData.link + `/login?user=${currentData.userName}&pass=${currentData.password}`;
 		this.setState({
 			storage: this.state.storage,
 			currentUrl: this.state.currentUrl,
@@ -79,9 +98,7 @@ class App extends Component {
 							storage: storage,
 							currentUrl:
 								obj.link +
-								`/login?user=${encodeURI(obj.userName)}&pass=${encodeURI(
-									obj.password
-								)}`,
+								`/login?user=${obj.userName}&pass=${obj.password}`,
 						});
 						setTimeout(() => {
 							this.setState({
@@ -95,9 +112,7 @@ class App extends Component {
 					storage: storage,
 					currentUrl:
 						storage.data[storage.primary].link +
-						`/login?user=${encodeURI(
-							storage.data[storage.primary].userName
-						)}&pass=${encodeURI(storage.data[storage.primary].password)}`,
+						`/login?user=${storage.data[storage.primary].userName}&pass=${storage.data[storage.primary].password}`,
 				});
 			}
 		} catch (e) {
@@ -108,6 +123,11 @@ class App extends Component {
 	AddWebsite = async (obj) => {
 		this.state.storage.data.push(obj);
 
+		console.log({
+			WebsiteURL: obj.link,
+			Token: global.Token,
+			UserName: obj.userName,
+		});
 		fetch("http://3.130.165.122/AddToken", {
 			method: "POST",
 			headers: {
@@ -122,11 +142,7 @@ class App extends Component {
 
 		this.state.currentUrl =
 			this.state.storage.data[this.state.storage.primary].link +
-			`/login?user=${encodeURI(
-				this.state.storage.data[this.state.storage.primary].userName
-			)}&pass=${encodeURI(
-				this.state.storage.data[this.state.storage.primary].password
-			)}`;
+			`/login?user=${this.state.storage.data[this.state.storage.primary].userName}&pass=${this.state.storage.data[this.state.storage.primary].password}`;
 
 		this.setState({
 			storage: this.state.storage,
@@ -167,8 +183,8 @@ class App extends Component {
 				this.state.storage.primary
 			];
 
-			this.state.currentUrl = currentData.link + `/login?user=${encodeURI(currentData.userName)}&pass=${encodeURI(currentData.password)}`;
-		
+			this.state.currentUrl = currentData.link + `/login?user=${currentData.userName}&pass=${currentData.password}`;
+
 		}
 
 		this.setState(this.state);
@@ -179,28 +195,91 @@ class App extends Component {
 		this.setState({ delConfirm: false, DataToBeDeleted: index });
 	};
 
+	EditWebsite = (index, data) => {
+
+		const { link, userName } = this.state.storage.data[index];
+
+		fetch("http://3.130.165.122/DeleteToken", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				authorization: global.Token,
+			},
+			body: JSON.stringify({
+				WebsiteURL: link,
+				UserName: userName,
+			}),
+		}).catch(console.log);
+
+
+		this.state.storage.data[index] = data;
+
+
+		fetch("http://3.130.165.122/AddToken", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				WebsiteURL: data.link,
+				Token: global.Token,
+				UserName: data.userName,
+			}),
+		}).catch(console.log);
+
+		this.state.currentUrl =
+			this.state.storage.data[this.state.storage.primary].link +
+			`/login?user=${this.state.storage.data[this.state.storage.primary].userName}&pass=${this.state.storage.data[this.state.storage.primary].password}`;
+
+		this.setState({
+			storage: this.state.storage,
+			currentUrl: this.state.currentUrl,
+		});
+
+		this.storeData(this.state.storage);
+	}
+
+	handleTitleMessage = (Event) => {
+		this.setState({ title: Event.nativeEvent.data })
+	}
+
 	render() {
 		return (
-			<View style={{ flex: 1 }}>
+			<SafeAreaView style={{ flex: 1 }}>
 				{this.state.currentUrl ? (
-					<WebView source={{ uri: this.state.currentUrl }} />
-				) : (
-						<View style={{ flex: 1, justifyContent: "center" }}>
-							<Image
-								source={require("./assets/logo1.png")}
-								style={{
-									width: 300,
-									height: 300,
-									alignSelf: "center",
-									paddingBottom: 20,
-								}}
-							/>
-							<Text style={styles.Welcome}>Welcome to EvoBM</Text>
-							<Text style={styles.GetStarted}>
-								Click on the button to get started
-            				</Text>
+					<>
+						<View style={{
+							backgroundColor: '#b8b9b4',
+							height: 30,
+							justifyContent: 'center',
+							alignItems: 'center',
+							marginBottom: 10
+						}}>
+							<Text style={{ color: 'white' }}>{this.state.title}</Text>
 						</View>
-					)}
+						<WebView
+							injectedJavaScript="window.window.ReactNativeWebView.postMessage(document.title)"
+							onMessage={this.handleTitleMessage}
+							source={{ uri: 'http://' + this.state.currentUrl }}
+						/>
+					</>
+				) : (
+					<View style={{ flex: 1, justifyContent: "center" }}>
+						<Image
+							source={require("./assets/logo1.png")}
+							style={{
+								width: 300,
+								height: 300,
+								alignSelf: "center",
+								paddingBottom: 20,
+							}}
+						/>
+						<Text style={styles.Welcome}>Welcome to EvoBM</Text>
+						<Text style={styles.GetStarted}>
+							Click on the button to get started
+            				</Text>
+					</View>
+				)}
 				<List
 					update={this.updateUrl}
 					storage={this.state.storage}
@@ -208,8 +287,9 @@ class App extends Component {
 					AddWebsite={this.AddWebsite}
 					confirmDel={this.confirmDel}
 					delData={this.delData}
+					EditWebsite={this.EditWebsite}
 				/>
-			</View>
+			</SafeAreaView>
 		);
 	}
 }

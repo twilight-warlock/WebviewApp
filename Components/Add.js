@@ -5,20 +5,19 @@ export default class Add extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: "",
-			username: "",
+			name: this.props.data?.name ? this.props.data?.name : "",
+			username: this.props.data?.userName ? this.HexToString(this.props.data?.userName) : "",
 			password: "",
-			url: "http://",
-			port: '80',
+			url: this.props.data?.link ? this.props.data?.link.split(":")[0] : "",
+			port: this.props.data?.link ? this.props.data?.link.split(":")[1] : "",
 			message: "",
 			color1: "#eee",
 			color2: "#eee",
 			color3: "#eee",
 			color4: "#eee",
+			color5: "#eee",
 		}
 	}
-
-	isUrlValid = (userInput) => /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi.test(userInput);
 
 	toHex = (string) => {
 		let result = "";
@@ -28,19 +27,36 @@ export default class Add extends Component {
 		return result;
 	}
 
+	HexToString = (string) => {
+		let hex  = string.toString().replaceAll('%', '');
+		let str = '';
+		for (let n = 0; n < hex.length; n += 2) {
+			str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+		}
+		return str;
+	}
+
+	isUrlValid = (userInput) => /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi.test(userInput);
+
 	submit = () => {
 		if (this.state.name && this.state.url && this.state.username && this.state.password) {
 			if (this.state.name.length >= 3) {
 				if (this.isUrlValid(this.state.url)) {
-
+					
+					this.state.url = this.state.url.replace(new RegExp("^(http[s]?://www\\.|http[s]?://|www\\.)"), "");
 					const obj = {
-						"name": this.state.name,
-						"link": this.state.url + ':' + this.state.port,
-						"userName": this.toHex(this.state.username),
-						"password": this.toHex(this.state.password)
+						name: this.state.name,
+						link: this.state.url + ':' + this.state.port,
+						userName: this.toHex(this.state.username),
+						password: this.toHex(this.state.password)
 					}
 
-					this.props.addData(obj)
+					let NewData = true;
+					if(this.props.data?.name) {
+						NewData = false;
+					}
+
+					this.props.addData(obj, NewData)
 				} else {
 					this.setState({ message: "Incorrect Url" })
 				}
@@ -56,10 +72,15 @@ export default class Add extends Component {
 	render() {
 		return (
 			<View style={styles.FormContainer}>
-				<Text style={styles.Heading}>Add an EVO System</Text>
+				{this.props.data ?
+					<Text style={styles.Heading}>Edit an EVO System</Text>
+					:
+					<Text style={styles.Heading}>Add an EVO System</Text>
+				}
 				<View style={styles.Spacer}>
 					<Text style={styles.Label}>Name</Text>
 					<TextInput
+						value={this.state.name}
 						onFocus={() => this.setState({ color1: "#38ACEC" })}
 						onBlur={() => this.setState({ color1: "white" })}
 						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color1 }}
@@ -70,6 +91,7 @@ export default class Add extends Component {
 				<View style={styles.Spacer}>
 					<Text style={styles.Label}>Url</Text>
 					<TextInput
+						value={this.state.url}
 						onFocus={() => this.setState({ color2: "#38ACEC" })}
 						onBlur={() => this.setState({ color2: "white" })}
 						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color2 }}
@@ -80,9 +102,10 @@ export default class Add extends Component {
 				<View style={styles.Spacer}>
 					<Text style={styles.Label}>Port</Text>
 					<TextInput
-						onFocus={() => this.setState({ color2: "#38ACEC" })}
-						onBlur={() => this.setState({ color2: "white" })}
-						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color2 }}
+						value={this.state.port}
+						onFocus={() => this.setState({ color3: "#38ACEC" })}
+						onBlur={() => this.setState({ color3: "white" })}
+						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color3 }}
 						placeholder="Enter Port"
 						onChangeText={(text) => this.setState({ port: text })}
 					/>
@@ -90,9 +113,10 @@ export default class Add extends Component {
 				<View style={styles.Spacer}>
 					<Text style={styles.Label}>Username</Text>
 					<TextInput
-						onFocus={() => this.setState({ color3: "#38ACEC" })}
-						onBlur={() => this.setState({ color3: "white" })}
-						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color3 }}
+						value={this.state.username}
+						onFocus={() => this.setState({ color4: "#38ACEC" })}
+						onBlur={() => this.setState({ color4: "white" })}
+						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color4 }}
 						placeholder="Enter Username"
 						onChangeText={(text) => this.setState({ username: text })}
 					/>
@@ -100,9 +124,10 @@ export default class Add extends Component {
 				<View style={{...styles.Spacer, marginBottom: 20 }}>
 					<Text style={styles.Label}>Password</Text>
 					<TextInput
-						onFocus={() => this.setState({ color4: "#38ACEC" })}
-						onBlur={() => this.setState({ color4: "white" })}
-						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color4 }}
+						value={this.state.password}
+						onFocus={() => this.setState({ color5: "#38ACEC" })}
+						onBlur={() => this.setState({ color5: "white" })}
+						style={{ borderBottomWidth: 2, borderBottomColor: this.state.color5 }}
 						placeholder="Enter Password"
 						onChangeText={(text) => this.setState({ password: text })}
 						secureTextEntry={true}
