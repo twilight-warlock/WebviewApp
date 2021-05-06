@@ -28,12 +28,15 @@ export default class Add extends Component {
 	}
 
 	HexToString = (string) => {
-		let hex  = string.toString().replaceAll('%', '');
-		let str = '';
-		for (let n = 0; n < hex.length; n += 2) {
-			str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+		if(string) {
+			let hex  = string.toString().replace(/\%/g, '');
+			let str = '';
+			for (let n = 0; n < hex.length; n += 2) {
+				str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+			}
+			return str;
 		}
-		return str;
+		return "";
 	}
 
 	isUrlValid = (userInput) => /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi.test(userInput);
